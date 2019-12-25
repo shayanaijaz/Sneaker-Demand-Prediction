@@ -1,18 +1,19 @@
-# Get the sneaker data from thesneakerdatabase api
+from twitter_data import get_twitter_data
+from regression import calculate_regression_equation
+from resell import get_resell_price
 
-import requests
-def get_sneaker_data(query):
-    brand = query.args.get('brand')
-    gender = query.args.get('gender')
-    year = query.args.get('year')
-    title = query.args.get('title')
-    colorway = query.args.get('colorway')
 
-    parameters = {'brand': brand, 'gender': gender, 'year': year, 'title': title, 'colorway':colorway}
+def main():
+    sneaker_input = input("Enter a sneaker name: ")
 
-    sneaker_data = requests.get('http://www.thesneakerdatabase.com/api/getData', params=parameters)
+    twitter_data = get_twitter_data(sneaker_input)
+    regression_data = calculate_regression_equation()
 
-    print(sneaker_data.url)
+    resell_perice = int(get_resell_price(twitter_data, regression_data))
 
-    new_data = sneaker_data.json()
-    print(new_data['data'])
+    print("The predicted resale price for " + sneaker_input + " is $" + str(resell_perice))
+    main()
+
+
+if __name__ == '__main__':
+    main()
